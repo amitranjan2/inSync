@@ -14,7 +14,7 @@ public class JwtProvider {
     private String jwtSecret="sIoVC8OFOgmxbk9XRYtY2zMKXuYXBGL2d3x1IV37";
 
     // Jwt Expiration in millis
-    private Long jwtExpiration = 60000L;
+    private Long jwtExpiration = 2592000000L; // 30 DAYS
 
     private Claims parseToken(String token) {
         // Create JwtParser
@@ -22,22 +22,30 @@ public class JwtProvider {
                 .setSigningKey(jwtSecret.getBytes())
                 .build();
 
+
+
         try {
             return jwtParser.parseClaimsJws(token)
                     .getBody();
         } catch (ExpiredJwtException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException("Token expired");
         } catch (UnsupportedJwtException e) {
+
             System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (MalformedJwtException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (SignatureException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
 
-        return null;
+//        return null;
     }
 
     public boolean validateToken(String token) {

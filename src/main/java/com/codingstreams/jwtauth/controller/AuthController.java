@@ -22,7 +22,7 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/token")
+    @PostMapping("/token")
     public String getToken(@RequestBody AuthRequest authRequest) throws Exception {
         // Get user details
         UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());

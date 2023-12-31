@@ -6,6 +6,7 @@ import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -55,9 +56,12 @@ public class SecurityConfig {
 
         // Authorize http requests
         http.authorizeHttpRequests()
-                .requestMatchers("/").permitAll()
+                .requestMatchers("/internal/**").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("api/**").permitAll()
+//                .requestMatchers("/homePage/**").permitAll()
                 .requestMatchers("/app-auth/token/**").permitAll()
-                .requestMatchers("/app-auth/createUser/**").permitAll()
+                .requestMatchers("/app-auth/createUser/**").authenticated()
                 .anyRequest().authenticated();
 
         // Add JWT authentication filter
