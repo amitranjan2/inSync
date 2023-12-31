@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class HeadorResponseDto {
     private String title;
-
+// cd
     private List<Articles> articlesList;
 
 }
