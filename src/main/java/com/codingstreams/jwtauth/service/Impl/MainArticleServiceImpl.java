@@ -16,7 +16,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -53,7 +55,7 @@ public class MainArticleServiceImpl implements MainArticleService {
 
     @Override
     public PaginatedMainArticleDTO getAllMainArticles(Pageable pageable) {
-        Page<MainArticleEntity> mainArticlePage = mainArticleRepository.findAll(pageable);
+        Page<MainArticleEntity> mainArticlePage = mainArticleRepository.findByStatusAndFeatureArticle(true,true,pageable);
 
         return returnPaginatedResponse(mainArticlePage,true);
     }
@@ -83,15 +85,17 @@ public class MainArticleServiceImpl implements MainArticleService {
 
         return PaginatedMainArticleDTO.builder().content(mainArticleDTOList).totalElements(mainArticlePage.getTotalElements()).totalPages(mainArticlePage.getTotalPages())
                 .ctaDtoList(ctaDtoList)
-                .title("Blog template using Next Js, Typescript and Taildwind CSS. rrrrrrrr")
-                .subTitle("This is a simple and static component based blog template for everyone testing.").build();
+                .title("This is an one stop platform for you trading and investment.")
+                .subTitle("").build();
 
     }
 
     @Override
     public PaginatedMainArticleDTO getMainArticlesByCategoryAndStatus(String category, Pageable pageable) {
-        Page<MainArticleEntity> mainArticlePage = mainArticleRepository.findByCategoryAndStatus(category,true,pageable);
+//        Page<MainArticleEntity> mainArticlePage = mainArticleRepository.findByCategoryAndStatus(category,true,pageable);
 
+        Pageable pageables = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdAt").descending());
+        Page<MainArticleEntity> mainArticlePage = mainArticleRepository.findByCategoryAndStatus(category, true, pageables);
         return returnPaginatedResponse(mainArticlePage,false);
     }
 
